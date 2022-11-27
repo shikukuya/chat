@@ -7,6 +7,7 @@
     <title>橘子树 Chat</title>
     <script src="index.js"></script>
     <link rel="stylesheet" href="index.css" />
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   </head>
   <body>
     <nav>
@@ -43,6 +44,15 @@
     <div id="input">
       <input type="text">
       <button>发送</button>
+    </div>
+    <div id="login">
+      <div class="inner">
+        <h3>登录</h3>
+        <input type="text" id="username" placeholder="用户名">
+        <input type="password" id="password" placeholder="密码">
+        <div class="h-captcha" data-sitekey="ecc49911-56f9-456e-afc9-b342e65bdc01"></div>
+        <button id="login_btn">登录</button>
+      </div>
     </div>
   </body>
 </html>

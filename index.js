@@ -10,10 +10,7 @@ last_time = "00:00";
 document.addEventListener("DOMContentLoaded", (e) => {
   console.log(METADATA.server);
   var ws = new WebSocket(METADATA.server);
-  var username =
-    prompt("服务器连接成功，请输入你的名字：（留空匿名）") ||
-    "匿名用户" + Math.random().toString().split(".")[1].substring(0, 5);
-  console.log(username);
+  login(ws);
   ws.addEventListener("open", (e) => {
     setInterval(() => {
       heartbeat(ws);
@@ -46,6 +43,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
   });
   document.querySelector("#theme").addEventListener("change", (e) => {
     document.querySelector("html").className = document.querySelector("#theme").value;
+  });
+  document.querySelector("#login_btn").addEventListener("click", (e) => {
+    if (hcaptcha.getResponse() === "") {
+      document.querySelector("#login_btn").innerText = "登录 - 请先完成 hCaptcha 验证"
+    } else {
+      fetch()
+    }
   })
 });
 
@@ -98,4 +102,7 @@ function add(user, content, me) {
 }
 function send(ws, username, message) {
   ws.send(username + METADATA.version_id + message);
+}
+function login(ws) {
+  
 }

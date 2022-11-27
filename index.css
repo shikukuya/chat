@@ -115,6 +115,28 @@ nav > select {
   background-color: var(--message-background);
   color: var(--accent);
 }
+#login {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#login > .inner {
+  background-color: var(--message-background);
+  padding: 2em;
+  border-radius: 20px;
+}
+#login > .inner h3 {
+  margin-top: 0;
+}
+#login > .inner input {
+  display: block;
+  margin: 1em 0;
+}
 a {
   color: inherit;
   text-decoration: none;
