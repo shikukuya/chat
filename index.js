@@ -10,7 +10,6 @@ last_time = "00:00";
 document.addEventListener("DOMContentLoaded", (e) => {
   console.log(METADATA.server);
   var ws = new WebSocket(METADATA.server);
-  login(ws);
   ws.addEventListener("open", (e) => {
     setInterval(() => {
       heartbeat(ws);
@@ -42,15 +41,17 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
   });
   document.querySelector("#theme").addEventListener("change", (e) => {
-    document.querySelector("html").className = document.querySelector("#theme").value;
+    document.querySelector("html").className =
+      document.querySelector("#theme").value;
   });
   document.querySelector("#login_btn").addEventListener("click", (e) => {
     if (hcaptcha.getResponse() === "") {
-      document.querySelector("#login_btn").innerText = "登录 - 请先完成 hCaptcha 验证"
+      document.querySelector("#login_btn").innerText =
+        "登录 - 请先完成 hCaptcha 验证";
     } else {
-      fetch()
+      login(ws);
     }
-  })
+  });
 });
 
 function heartbeat(ws) {
@@ -66,9 +67,9 @@ function add(user, content, me) {
   el.classList.add(type);
   if (content.match(METADATA.file_regxp)) {
     var file = content.substring(14, content.length - 1);
-    file = file.startsWith("http") ? file : `http://${file}`
+    file = file.startsWith("http") ? file : `http://${file}`;
     file = file.replace(":8080", ":86");
-    el.innerHTML = `<a href="${file}" target="_blank">查看文件</a><details><summary>预览</summary><iframe src="${file}" frameborder="0">无法预览文件</iframe></details>`
+    el.innerHTML = `<a href="${file}" target="_blank">查看文件</a><details><summary>预览</summary><iframe src="${file}" frameborder="0">无法预览文件</iframe></details>`;
   } else {
     el.innerText = content;
   }
@@ -103,6 +104,14 @@ function add(user, content, me) {
 function send(ws, username, message) {
   ws.send(username + METADATA.version_id + message);
 }
-function login(ws) {
-  
+function login(ws, h_response) {
+  fetch("https://hcaptcha.com/siteverify", {
+    method: "POST",
+    body: new URLSearchParams({
+      response: h_response,
+      secret: "0x65D858D5cbd84137d37b7487f387E84a237aCA86",
+    }),
+  }).then((response) => {
+    console.log(response.body);
+  });
 }
