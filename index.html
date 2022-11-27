@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="orange">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>橘子树 Chat</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <nav>
+      <h3>橘子树 Chat</h3>
+      <select id="theme">
+        <optgroup label="主题设置">
+          <option value="light">浅色</option>
+          <option value="dark">深色</option>
+          <option value="orange" selected>橙色</option>
+        </optgroup>
+      </select>
+    </nav>
+    <div id="messages">
+      <!-- 
+        橘子树 Chat 聊天气泡
+        <div class="msg" user="xxx"></div> 表示对方的消息（左对齐）
+        <div class="me" user="xxx"></div> 表示自己的消息（右对齐）
+        <div class="info"></div> 表示系统消息（中间对齐）
+      -->
+      <example>
+        <div class="info">你发送了一个窗口抖动</div>
+        <div class="me" user="A">在吗</div>
+        <div class="msg" user="B">？咋了</div>
+        <!-- 效果:
+                    <发送了一个窗口抖动>
+                                    [ 在吗 ] A
+            B [ ？咋了 ]
+        -->
+      </example>
+      <div class="info">欢迎使用：橘子树 Chat</div>
+      <div class="info">版本：3.3-html</div>
+      <div class="info">官方交流群：938770865</div>
+    </div>
+    <div id="input">
+      <input type="text">
+      <button>发送</button>
+    </div>
+  </body>
+</html>
