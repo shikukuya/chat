@@ -8,6 +8,7 @@ const METADATA = {
 };
 var last_time = "00:00";
 var username = "Unknown";
+var readonly = true;
 
 document.addEventListener("DOMContentLoaded", (e) => {
   console.log(METADATA.server);
@@ -32,31 +33,43 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
   });
   function _() {
-    // 临时函数
-    send(ws, username, document.querySelector("#input > input").value);
-    document.querySelector("#input > input").value = "";
+    // 临时函数：发送输入框中的消息
+    if (readonly) {
+      alert("当前为未登录模式，请登录后发送消息");
+    } else {
+      send(ws, username, document.querySelector("#input > input").value);
+      document.querySelector("#input > input").value = "";
+    }
   }
   document.querySelector("#input > button").addEventListener("click", _);
   document.querySelector("#input > input").addEventListener("keydown", (e) => {
+    // 回车发送
     if (e.key === "Enter") {
       _();
     }
   });
   document.querySelector("#theme").addEventListener("change", (e) => {
+    // 主题
     document.querySelector("html").className =
       document.querySelector("#theme").value;
   });
   document.querySelector("#login_btn").addEventListener("click", (e) => {
+    // 登录按钮
     login(
       document.querySelector("#username").value,
       document.querySelector("#password").value
     );
   });
   document.querySelector("#register_btn").addEventListener("click", (e) => {
+    // 注册按钮
     register(
       document.querySelector("#username").value,
       document.querySelector("#password").value
     );
+  });
+  document.querySelector("#readonly_btn").addEventListener("click", (e) => {
+    // 不登录按钮
+    document.querySelector("#login").style.display = "none";
   });
 });
 
@@ -122,6 +135,7 @@ function login(user, password) {
       alert("登录失败");
     } else {
       username = user;
+      readonly = false;
       document.querySelector("#login").style.display = "none";
     }
   });
@@ -131,9 +145,6 @@ function register(username, password) {
   wsa.addEventListener("open", (e) => {
     console.log(`注册<@*%*@>${username}<@*%*@>${password}`);
     wsa.send(`注册<@*%*@>${username}<@*%*@>${password}`);
-  });
-  wsa.addEventListener("message", (e) => {
-    console.log(e.data);
-    alert("ok");
+    alert("注册成功");
   });
 }
