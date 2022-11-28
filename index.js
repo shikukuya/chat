@@ -155,9 +155,6 @@ function login(user, password) {
     } else {
       username = user;
       readonly = false;
-      var el = document.createElement("div");
-      el.innerText = "登录为：" + username;
-      el.classList.add("info");
       document.querySelector("#messages").append(el);
       document.querySelector("#login").style.display = "none";
     }
