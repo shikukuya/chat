@@ -155,7 +155,6 @@ function login(user, password) {
     } else {
       username = user;
       readonly = false;
-      document.querySelector("#messages").append(el);
       document.querySelector("#login").style.display = "none";
     }
   });

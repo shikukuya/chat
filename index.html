@@ -10,38 +10,37 @@
   </head>
   <body>
     <nav>
-      <div class="left">
-        <h3>橘子树 Chat</h3>
-        <select id="theme">
-          <optgroup label="主题设置">
-            <option value="light">浅色</option>
-            <option value="dark">深色</option>
-            <option value="orange" selected>橙色</option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="right">
-        test
-      </div>
+      <h3>橘子树 Chat</h3>
+      <select id="theme">
+        <optgroup label="主题设置">
+          <option value="light">浅色</option>
+          <option value="dark">深色</option>
+          <option value="orange" selected>橙色</option>
+        </optgroup>
+      </select>
+      <details>
+        <summary>更多信息</summary>
+        <span>3.4-html 交流群：938770865</span>
+      </details>
     </nav>
-    <div id="messages">
-      <div class="info">欢迎使用：橘子树 Chat</div>
-      <div class="info">版本：3.4-html</div>
-      <div class="info">官方交流群：938770865</div>
-    </div>
+    <div id="messages"></div>
     <div id="input">
-      <input type="text">
+      <input type="text" />
       <button>发送</button>
     </div>
     <div id="login">
       <div class="inner">
         <h3>登录</h3>
-        <input type="text" id="username" placeholder="用户名">
-        <input type="password" id="password" placeholder="密码">
-        <input type="password" id="password2" placeholder="确认密码（注册时填写）">
+        <input type="text" id="username" placeholder="用户名" />
+        <input type="password" id="password" placeholder="密码" />
+        <input
+          type="password"
+          id="password2"
+          placeholder="确认密码（注册时填写）"
+        />
         <button id="login_btn">登录</button>
         <button id="register_btn">注册</button>
-        <br>
+        <br />
         <button id="readonly_btn">不登录直接使用（不能发消息）</button>
       </div>
     </div>
