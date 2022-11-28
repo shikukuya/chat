@@ -137,6 +137,9 @@ nav > select {
   display: block;
   margin: 1em 0;
 }
+#login > .inner button {
+  margin-bottom: 0.4em;
+}
 a {
   color: inherit;
   text-decoration: none;

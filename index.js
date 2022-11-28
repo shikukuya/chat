@@ -2,10 +2,13 @@ const METADATA = {
   version_id: "@#y!h(d^l?",
   separator: "：",
   server: "ws://111.67.198.246:5355",
+  account_server: "ws://111.67.198.246:1145",
   heartbeat: "HeartBeat",
   file_regxp: /^我发了一个文件，下载(链接|连接)是（.+）$/,
 };
-last_time = "00:00";
+var last_time = "00:00";
+var username = "Unknown";
+var readonly = true;
 
 document.addEventListener("DOMContentLoaded", (e) => {
   console.log(METADATA.server);
@@ -30,27 +33,43 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
   });
   function _() {
-    // 临时函数
-    send(ws, username, document.querySelector("#input > input").value);
-    document.querySelector("#input > input").value = "";
+    // 临时函数：发送输入框中的消息
+    if (readonly) {
+      alert("当前为未登录模式，请登录后发送消息");
+    } else {
+      send(ws, username, document.querySelector("#input > input").value);
+      document.querySelector("#input > input").value = "";
+    }
   }
   document.querySelector("#input > button").addEventListener("click", _);
   document.querySelector("#input > input").addEventListener("keydown", (e) => {
+    // 回车发送
     if (e.key === "Enter") {
       _();
     }
   });
   document.querySelector("#theme").addEventListener("change", (e) => {
+    // 主题
     document.querySelector("html").className =
       document.querySelector("#theme").value;
   });
   document.querySelector("#login_btn").addEventListener("click", (e) => {
-    if (hcaptcha.getResponse() === "") {
-      document.querySelector("#login_btn").innerText =
-        "登录 - 请先完成 hCaptcha 验证";
-    } else {
-      login(ws);
-    }
+    // 登录按钮
+    login(
+      document.querySelector("#username").value,
+      document.querySelector("#password").value
+    );
+  });
+  document.querySelector("#register_btn").addEventListener("click", (e) => {
+    // 注册按钮
+    register(
+      document.querySelector("#username").value,
+      document.querySelector("#password").value
+    );
+  });
+  document.querySelector("#readonly_btn").addEventListener("click", (e) => {
+    // 不登录按钮
+    document.querySelector("#login").style.display = "none";
   });
 });
 
@@ -104,14 +123,28 @@ function add(user, content, me) {
 function send(ws, username, message) {
   ws.send(username + METADATA.version_id + message);
 }
-function login(ws, h_response) {
-  fetch("https://hcaptcha.com/siteverify", {
-    method: "POST",
-    body: new URLSearchParams({
-      response: h_response,
-      secret: "0x65D858D5cbd84137d37b7487f387E84a237aCA86",
-    }),
-  }).then((response) => {
-    console.log(response.body);
+function login(user, password) {
+  var wsa = new WebSocket(METADATA.account_server);
+  wsa.addEventListener("open", (e) => {
+    console.log(`登录<@*%*@>${user}<@*%*@>${password}`);
+    wsa.send(`登录<@*%*@>${user}<@*%*@>${password}`);
+  });
+  wsa.addEventListener("message", (e) => {
+    console.log(e.data);
+    if (e.data === "<*假*>") {
+      alert("登录失败");
+    } else {
+      username = user;
+      readonly = false;
+      document.querySelector("#login").style.display = "none";
+    }
+  });
+}
+function register(username, password) {
+  var wsa = new WebSocket(METADATA.account_server);
+  wsa.addEventListener("open", (e) => {
+    console.log(`注册<@*%*@>${username}<@*%*@>${password}`);
+    wsa.send(`注册<@*%*@>${username}<@*%*@>${password}`);
+    alert("注册成功");
   });
 }
