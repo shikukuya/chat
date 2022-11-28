@@ -2,10 +2,12 @@ const METADATA = {
   version_id: "@#y!h(d^l?",
   separator: "：",
   server: "ws://111.67.198.246:5355",
+  account_server: "ws://111.67.198.246:1145",
   heartbeat: "HeartBeat",
   file_regxp: /^我发了一个文件，下载(链接|连接)是（.+）$/,
 };
-last_time = "00:00";
+var last_time = "00:00";
+var username = "Unknown";
 
 document.addEventListener("DOMContentLoaded", (e) => {
   console.log(METADATA.server);
@@ -45,12 +47,16 @@ document.addEventListener("DOMContentLoaded", (e) => {
       document.querySelector("#theme").value;
   });
   document.querySelector("#login_btn").addEventListener("click", (e) => {
-    if (hcaptcha.getResponse() === "") {
-      document.querySelector("#login_btn").innerText =
-        "登录 - 请先完成 hCaptcha 验证";
-    } else {
-      login(ws);
-    }
+    login(
+      document.querySelector("#username").value,
+      document.querySelector("#password").value
+    );
+  });
+  document.querySelector("#register_btn").addEventListener("click", (e) => {
+    register(
+      document.querySelector("#username").value,
+      document.querySelector("#password").value
+    );
   });
 });
 
@@ -104,14 +110,30 @@ function add(user, content, me) {
 function send(ws, username, message) {
   ws.send(username + METADATA.version_id + message);
 }
-function login(ws, h_response) {
-  fetch("https://hcaptcha.com/siteverify", {
-    method: "POST",
-    body: new URLSearchParams({
-      response: h_response,
-      secret: "0x65D858D5cbd84137d37b7487f387E84a237aCA86",
-    }),
-  }).then((response) => {
-    console.log(response.body);
+function login(user, password) {
+  var wsa = new WebSocket(METADATA.account_server);
+  wsa.addEventListener("open", (e) => {
+    console.log(`登录<@*%*@>${user}<@*%*@>${password}`);
+    wsa.send(`登录<@*%*@>${user}<@*%*@>${password}`);
+  });
+  wsa.addEventListener("message", (e) => {
+    console.log(e.data);
+    if (e.data === "<*假*>") {
+      alert("登录失败");
+    } else {
+      username = user;
+      document.querySelector("#login").style.display = "none";
+    }
+  });
+}
+function register(username, password) {
+  var wsa = new WebSocket(METADATA.account_server);
+  wsa.addEventListener("open", (e) => {
+    console.log(`注册<@*%*@>${username}<@*%*@>${password}`);
+    wsa.send(`注册<@*%*@>${username}<@*%*@>${password}`);
+  });
+  wsa.addEventListener("message", (e) => {
+    console.log(e.data);
+    alert("ok");
   });
 }
