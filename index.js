@@ -1,4 +1,4 @@
-const METADATA = {
+var METADATA = {
   version_id: "@#y!h(d^l?",
   separator: "：",
   server: "ws://111.67.198.246:5355",
@@ -52,8 +52,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
   });
   document.querySelector("#theme").addEventListener("change", (e) => {
     // 主题
-    document.querySelector("html").className =
-      document.querySelector("#theme").value;
+    document.querySelector("html").className = document.querySelector("#theme").value;
   });
   document.querySelector("#login_btn").addEventListener("click", (e) => {
     // 登录按钮
@@ -61,10 +60,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     document.querySelector("#login_btn").setAttribute("disabled", "");
     setTimeout(() => {
       // 等待 0.5 秒，让用户加钱优化
-      login(
-        document.querySelector("#username").value,
-        document.querySelector("#password").value
-      );
+      login(document.querySelector("#username").value, document.querySelector("#password").value);
       document.querySelector("#login_btn").innerText = "登录";
       document.querySelector("#login_btn").removeAttribute("disabled");
     }, 500);
@@ -75,10 +71,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     document.querySelector("#register_btn").setAttribute("disabled", "");
     setTimeout(() => {
       // 等待 0.5 秒，让用户加钱优化
-      register(
-        document.querySelector("#username").value,
-        document.querySelector("#password").value
-      );
+      register(document.querySelector("#username").value, document.querySelector("#password").value);
       document.querySelector("#register_btn").innerText = "注册";
       document.querySelector("#register_btn").removeAttribute("disabled");
     }, 500);
@@ -133,8 +126,7 @@ function add(user, content, me) {
       }
     }
   }
-  document.querySelector("#messages").scrollTop =
-    document.querySelector("#messages").scrollHeight;
+  document.querySelector("#messages").scrollTop = document.querySelector("#messages").scrollHeight;
 }
 function send(ws, username, message) {
   ws.send(username + METADATA.version_id + message);
@@ -166,4 +158,8 @@ function register(username, password) {
     wsa.send(`注册<@*%*@>${username}<@*%*@>${password}`);
     alert("注册成功");
   });
+}
+function cb_login_hcaptcha(response) {
+  document.querySelector("#login_controls").style.display = "block";
+  return true;
 }
