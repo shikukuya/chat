@@ -34,25 +34,35 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-rows: 4em calc(100% - 7em) 3em;
+  grid-template-rows: 4em calc(100vh - 7em) 3em;
 }
 nav {
   display: flex;
   align-items: center;
   color: var(--accent);
   border-bottom: 2px solid var(--accent);
+  overflow: auto none;
 }
-nav > h3 {
+nav > * {
   margin: 1em;
   display: inline;
 }
 nav > select {
   height: 2em;
 }
+nav > details {
+  margin-left: 0.3em;
+}
+nav > details > summary::marker {
+  color: transparent;
+}
+nav > details > span {
+  margin-left: 1em;
+}
 #messages {
   display: block;
   padding: 1em;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 #messages::-webkit-scrollbar {
   width: 0.5em;

@@ -5,6 +5,8 @@ const METADATA = {
   account_server: "ws://111.67.198.246:1145",
   heartbeat: "HeartBeat",
   file_regxp: /^我发了一个文件，下载(链接|连接)是（.+）$/,
+  login_error:
+    '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="https://music.163.com/outchain/player?type=2&id=333750&auto=1&height=66"></iframe>',
 };
 var last_time = "00:00";
 var username = "Unknown";
@@ -55,17 +57,31 @@ document.addEventListener("DOMContentLoaded", (e) => {
   });
   document.querySelector("#login_btn").addEventListener("click", (e) => {
     // 登录按钮
-    login(
-      document.querySelector("#username").value,
-      document.querySelector("#password").value
-    );
+    document.querySelector("#login_btn").innerText = "登录 - 请稍后";
+    document.querySelector("#login_btn").setAttribute("disabled", "");
+    setTimeout(() => {
+      // 等待 0.5 秒，让用户加钱优化
+      login(
+        document.querySelector("#username").value,
+        document.querySelector("#password").value
+      );
+      document.querySelector("#login_btn").innerText = "登录";
+      document.querySelector("#login_btn").removeAttribute("disabled");
+    }, 500);
   });
   document.querySelector("#register_btn").addEventListener("click", (e) => {
     // 注册按钮
-    register(
-      document.querySelector("#username").value,
-      document.querySelector("#password").value
-    );
+    document.querySelector("#register_btn").innerText = "注册 - 请稍后";
+    document.querySelector("#register_btn").setAttribute("disabled", "");
+    setTimeout(() => {
+      // 等待 0.5 秒，让用户加钱优化
+      register(
+        document.querySelector("#username").value,
+        document.querySelector("#password").value
+      );
+      document.querySelector("#register_btn").innerText = "注册";
+      document.querySelector("#register_btn").removeAttribute("disabled");
+    }, 500);
   });
   document.querySelector("#readonly_btn").addEventListener("click", (e) => {
     // 不登录按钮
@@ -132,7 +148,10 @@ function login(user, password) {
   wsa.addEventListener("message", (e) => {
     console.log(e.data);
     if (e.data === "<*假*>") {
-      alert("登录失败");
+      document.querySelector("#login_btn").innerText = "登录 - 登录失败";
+      var el = document.createElement("div");
+      el.innerHTML = METADATA.login_error;
+      document.querySelector("#login > .inner").append(el);
     } else {
       username = user;
       readonly = false;
