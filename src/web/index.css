@@ -1,151 +1,156 @@
 html.orange {
-  --background: #fb0;
-  --accent: #000;
-  --message-background: orange;
-  --info-background: #555;
+    --background: #fb0;
+    --accent: #000;
+    --message-background: orange;
+    --info-background: #555;
 }
 html.dark {
-  --background: #222;
-  --accent: #eee;
-  --message-background: #444;
-  --info-background: #777;
+    --background: #222;
+    --accent: #eee;
+    --message-background: #444;
+    --info-background: #777;
 }
 html.light {
-  --background: #ddd;
-  --accent: #111;
-  --message-background: #ccc;
-  --info-background: #777;
+    --background: #ddd;
+    --accent: #111;
+    --message-background: #ccc;
+    --info-background: #777;
 }
 
 * {
-  font-family: system-ui, sans-serif;
-  transition: background-color 0.3s, color 0.3s;
+    font-family: system-ui, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 html {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: var(--background);
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-rows: 4em calc(100vh - 7em) 3em;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--background);
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-rows: 4em calc(100vh - 7em) 3em;
 }
 nav {
-  display: flex;
-  align-items: center;
-  color: var(--accent);
-  border-bottom: 2px solid var(--accent);
-  overflow: auto none;
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    overflow: auto none;
 }
 nav > * {
-  margin: 1em;
-  display: inline;
+    margin: 1em;
+    display: inline;
 }
 #messages {
-  display: block;
-  padding: 1em;
-  overflow-y: auto;
+    display: block;
+    padding: 1em;
+    overflow-y: auto;
 }
 #messages::-webkit-scrollbar {
-  width: 0.5em;
-  background-color: var(--message-background);
+    width: 0.5em;
+    background-color: var(--message-background);
 }
 #messages::-webkit-scrollbar-thumb {
-  background-color: var(--info-background);
-  border-radius: 10px;
+    background-color: var(--info-background);
+    border-radius: 10px;
 }
 #messages::-webkit-scrollbar-button {
-  height: 0;
+    height: 0;
 }
 #messages > * {
-  margin: 1em;
-  display: inline;
-  width: max-content;
-  color: var(--accent);
-  clear: both;
+    margin: 1em;
+    display: inline;
+    width: max-content;
+    color: var(--accent);
+    clear: both;
 }
 #messages > div.info {
-  text-align: center;
-  margin: 1em auto;
-  display: block;
-  width: 100%;
-  color: var(--info-background);
+    text-align: center;
+    margin: 1em auto;
+    display: block;
+    width: 100%;
+    color: var(--info-background);
 }
 #messages > div.msg,
 #messages > div.me {
-  background-color: var(--message-background);
-  padding: 1em;
-  border-radius: 10px;
-  max-width: 60%;
-  --user: "Unknown";
+    background-color: var(--message-background);
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 60%;
+    --user: "Unknown";
 }
 #messages > div.msg > details > iframe,
 #messages > div.me > details > iframe {
-  height: 40vh;
+    height: 40vh;
 }
 #messages > div.msg::before {
-  content: var(--user);
-  margin-right: 0.8em;
-  color: var(--info-background);
+    content: var(--user);
+    margin-right: 0.8em;
+    color: var(--info-background);
 }
 #messages > div.me::after {
-  content: var(--user);
-  margin-left: 0.8em;
-  color: var(--info-background);
+    content: var(--user);
+    margin-left: 0.8em;
+    color: var(--info-background);
 }
 #messages > div.msg {
-  text-align: left;
-  float: left;
+    text-align: left;
+    float: left;
 }
 #messages > div.me {
-  text-align: right;
-  float: right;
+    text-align: right;
+    float: right;
 }
 #input {
-  display: grid;
-  grid-template-columns: auto 20%;
+    display: grid;
+    grid-template-columns: auto 20%;
 }
 #input > * {
-  height: 100%;
-  border: none;
-  background-color: var(--message-background);
-  color: var(--accent);
+    height: 100%;
+    border: none;
+    background-color: var(--message-background);
+    color: var(--accent);
 }
 #login {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999;
-  backdrop-filter: blur(3px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login > .inner :where(input, button) {
+    background-color: var(--background);
+    color: var(--accent);
 }
 #login > .inner {
-  background-color: var(--message-background);
-  padding: 2em;
-  border-radius: 20px;
+    background-color: var(--message-background);
+    padding: 2em;
+    border-radius: 20px;
 }
 #login > .inner h3 {
-  margin-top: 0;
+    margin-top: 0;
+    color: var(--accent);
 }
 #login > .inner input {
-  display: block;
-  margin: 1em 0;
+    display: block;
+    margin: 1em 0;
 }
 #login > .inner button {
-  margin-bottom: 0.4em;
+    margin-bottom: 0.4em;
 }
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 example {
-  display: none !important;
+    display: none !important;
 }

@@ -17,10 +17,33 @@ var fs = require("fs");
 var appdata = process.env.APPDATA;
 var root_folder = appdata + "\\橘子树工作室\\chat";
 var options_file = root_folder + "\\options.json";
-var options = {};
+var options = {
+    theme: "orange",
+};
 
 document.addEventListener("DOMContentLoaded", (e) => {
-    //#region 链接websocket
+    //#region 处理fs相关信息
+    try {
+        fs.mkdirSync(appdata + "\\橘子树工作室");
+        fs.mkdirSync(appdata + "\\橘子树工作室\\chat");
+    } catch {}
+    try {
+        JSON.parse(
+            fs.readFileSync(options_file).toString("utf-8"),
+            (key, value) => {
+                console.log("读取配置文件", key, value);
+                options[key] = value;
+            }
+        );
+    } catch {
+        fs.writeFileSync(
+            options_file,
+            '{"修改前必看": "这是橘子树 Chat 1.0-node(仅此分支) 版本以上的配置文件，编码为 UTF-8，保存时请确认编码为 UTF-8"}'
+        );
+        window.location.reload();
+    }
+    //#endregion
+    //#region 连接websocket
     console.log(METADATA.server);
     var ws = new WebSocket(METADATA.server);
     ws.addEventListener("open", (e) => {
@@ -37,77 +60,84 @@ document.addEventListener("DOMContentLoaded", (e) => {
         alert(METADATA.websocket_error);
     });
     //#endregion
-    //#region 处理dom事件
-    document.body.addEventListener("keyup", (e) => {
-        if (e.key === "v") {
-            heartbeat(ws);
-        }
-    });
-    function _() {
-        // 临时函数：发送输入框中的消息
-        if (readonly) {
-            alert("当前为未登录模式，请登录后发送消息");
-        } else {
-            send(ws, username, document.querySelector("#input > input").value);
-            document.querySelector("#input > input").value = "";
-        }
-    }
-    document.querySelector("#input > button").addEventListener("click", _);
-    document
-        .querySelector("#input > input")
-        .addEventListener("keydown", (e) => {
-            // 回车发送
-            if (e.key === "Enter") {
-                _();
+    try {
+        //#region 处理dom事件
+        document.body.addEventListener("keyup", (e) => {
+            if (e.key === "v") {
+                heartbeat(ws);
             }
         });
-    document.querySelector("#login_btn").addEventListener("click", (e) => {
-        // 登录按钮
-        document.querySelector("#login_btn").innerText =
-            "登录 - " + METADATA.loading_button;
-        document.querySelector("#login_btn").setAttribute("disabled", "");
-        setTimeout(() => {
-            login(
-                document.querySelector("#username").value,
-                document.querySelector("#password").value
-            );
-            document.querySelector("#login_btn").innerText = "登录";
-            document.querySelector("#login_btn").removeAttribute("disabled");
-        }, 2000);
-    });
-    document.querySelector("#register_btn").addEventListener("click", (e) => {
-        // 注册按钮
-        document.querySelector("#register_btn").innerText =
-            "注册 - " + METADATA.loading_button;
-        document.querySelector("#register_btn").setAttribute("disabled", "");
-        setTimeout(() => {
-            register(
-                document.querySelector("#username").value,
-                document.querySelector("#password").value
-            );
-            document.querySelector("#register_btn").innerText = "注册";
-            document.querySelector("#register_btn").removeAttribute("disabled");
-        }, 2000);
-    });
-    document.querySelector("#readonly_btn").addEventListener("click", (e) => {
-        // 不登录按钮
-        document.querySelector("#login").style.display = "none";
-    });
-    //#endregion
-    //#region 处理fs相关信息
-    try {
-        fs.mkdirSync(appdata + "\\橘子树工作室");
-        fs.mkdirSync(appdata + "\\橘子树工作室\\chat");
-    } catch {}
-    try {
-        JSON.parse(fs.readFileSync(options_file).toString("utf-8"), (key, value) => {
-            console.log("读取配置文件", key, value);
-            options[key] = value;
+        function _() {
+            // 临时函数：发送输入框中的消息
+            if (readonly) {
+                alert("当前为未登录模式，请登录后发送消息");
+            } else {
+                send(
+                    ws,
+                    username,
+                    document.querySelector("#input > input").value
+                );
+                document.querySelector("#input > input").value = "";
+            }
+        }
+        document.querySelector("#input > button").addEventListener("click", _);
+        document
+            .querySelector("#input > input")
+            .addEventListener("keydown", (e) => {
+                // 回车发送
+                if (e.key === "Enter") {
+                    _();
+                }
+            });
+        document.querySelector("#login_btn").addEventListener("click", (e) => {
+            // 登录按钮
+            document.querySelector("#login_btn").innerText =
+                "登录 - " + METADATA.loading_button;
+            document.querySelector("#login_btn").setAttribute("disabled", "");
+            setTimeout(() => {
+                login(
+                    document.querySelector("#username").value,
+                    document.querySelector("#password").value
+                );
+                document.querySelector("#login_btn").innerText = "登录";
+                document
+                    .querySelector("#login_btn")
+                    .removeAttribute("disabled");
+            }, 2000);
         });
-    } catch {
-        fs.writeFileSync(options_file, '{"修改前必看": "这是橘子树 Chat 1.0-node(仅此分支) 版本以上的配置文件，编码为 UTF-8，保存时请确认编码为 UTF-8"}');
-        window.location.reload();
+        document
+            .querySelector("#register_btn")
+            .addEventListener("click", (e) => {
+                // 注册按钮
+                document.querySelector("#register_btn").innerText =
+                    "注册 - " + METADATA.loading_button;
+                document
+                    .querySelector("#register_btn")
+                    .setAttribute("disabled", "");
+                setTimeout(() => {
+                    register(
+                        document.querySelector("#username").value,
+                        document.querySelector("#password").value
+                    );
+                    document.querySelector("#register_btn").innerText = "注册";
+                    document
+                        .querySelector("#register_btn")
+                        .removeAttribute("disabled");
+                }, 2000);
+            });
+        document
+            .querySelector("#readonly_btn")
+            .addEventListener("click", (e) => {
+                // 不登录按钮
+                document.querySelector("#login").style.display = "none";
+            });
+        //#endregion
+    } catch (err) {
+        // 防止串js导致无法获取dom元素
+        console.info(err);
     }
+    //#region 应用配置
+    document.querySelector("html").className = options.theme;
     //#endregion
 });
 
