@@ -8,11 +8,16 @@ var METADATA = {
     login_error:
         '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="https://music.163.com/outchain/player?type=2&id=333750&auto=1&height=66"></iframe>',
     websocket_error: "无法连接至服务器，请联系站长",
+    loading_button: "正在进行操作，需要3-5秒时间，请不要多点",
 };
 var last_time = "00:00";
 var username = "Unknown";
 var readonly = true;
 var fs = require("fs");
+var appdata = process.env.APPDATA;
+var root_folder = appdata + "\\橘子树工作室\\chat";
+var options_file = root_folder + "\\options.json";
+var options = {};
 
 document.addEventListener("DOMContentLoaded", (e) => {
     //#region 链接websocket
@@ -56,38 +61,33 @@ document.addEventListener("DOMContentLoaded", (e) => {
                 _();
             }
         });
-    document.querySelector("#theme").addEventListener("change", (e) => {
-        // 主题
-        document.querySelector("html").className =
-            document.querySelector("#theme").value;
-    });
     document.querySelector("#login_btn").addEventListener("click", (e) => {
         // 登录按钮
-        document.querySelector("#login_btn").innerText = "登录 - 请稍后";
+        document.querySelector("#login_btn").innerText =
+            "登录 - " + METADATA.loading_button;
         document.querySelector("#login_btn").setAttribute("disabled", "");
         setTimeout(() => {
-            // 等待 0.5 秒，让用户加钱优化
             login(
                 document.querySelector("#username").value,
                 document.querySelector("#password").value
             );
             document.querySelector("#login_btn").innerText = "登录";
             document.querySelector("#login_btn").removeAttribute("disabled");
-        }, 500);
+        }, 2000);
     });
     document.querySelector("#register_btn").addEventListener("click", (e) => {
         // 注册按钮
-        document.querySelector("#register_btn").innerText = "注册 - 请稍后";
+        document.querySelector("#register_btn").innerText =
+            "注册 - " + METADATA.loading_button;
         document.querySelector("#register_btn").setAttribute("disabled", "");
         setTimeout(() => {
-            // 等待 0.5 秒，让用户加钱优化
             register(
                 document.querySelector("#username").value,
                 document.querySelector("#password").value
             );
             document.querySelector("#register_btn").innerText = "注册";
             document.querySelector("#register_btn").removeAttribute("disabled");
-        }, 500);
+        }, 2000);
     });
     document.querySelector("#readonly_btn").addEventListener("click", (e) => {
         // 不登录按钮
@@ -95,7 +95,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
     });
     //#endregion
     //#region 处理fs相关信息
-    var appdata = fs.mkdir("%appdata%\\Sampling Studio\\chat");
+    try {
+        fs.mkdirSync(appdata + "\\橘子树工作室");
+        fs.mkdirSync(appdata + "\\橘子树工作室\\chat");
+    } catch {}
+    try {
+        JSON.parse(fs.readFileSync(options_file).toString("utf-8"), (key, value) => {
+            console.log("读取配置文件", key, value);
+            options[key] = value;
+        });
+    } catch {
+        fs.writeFileSync(options_file, '{"修改前必看": "这是橘子树 Chat 1.0-node(仅此分支) 版本以上的配置文件，编码为 UTF-8，保存时请确认编码为 UTF-8"}');
+        window.location.reload();
+    }
     //#endregion
 });
 

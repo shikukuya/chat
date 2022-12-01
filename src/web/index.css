@@ -47,18 +47,6 @@ nav > * {
   margin: 1em;
   display: inline;
 }
-nav > select {
-  height: 2em;
-}
-nav > details {
-  margin-left: 0.3em;
-}
-nav > details > summary::marker {
-  color: transparent;
-}
-nav > details > span {
-  margin-left: 1em;
-}
 #messages {
   display: block;
   padding: 1em;
