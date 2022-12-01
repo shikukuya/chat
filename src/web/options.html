@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="orange">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>橘子树 Chat</title>
+        <script src="index.js"></script>
+        <link rel="stylesheet" href="index.css" />
+    </head>
+    <body>
+        <nav>
+            <h3>橘子树 Chat - 设置</h3>
+            <select id="theme">
+                <option value="light">浅色</option>
+                <option value="dark">深色</option>
+                <option value="orange" selected>橙色</option>
+            </select>
+            <details>
+                <summary>更多信息</summary>
+                <span>1.0-node 交流群:938770865</span>
+            </details>
+        </nav>
+        <div id="messages"></div>
+        <div id="input">
+            <input type="text" />
+            <button>发送</button>
+        </div>
+        <div id="login">
+            <div class="inner">
+                <h3>登录</h3>
+                <input type="text" id="username" placeholder="用户名" />
+                <input type="password" id="password" placeholder="密码" />
+                <input
+                    type="password"
+                    id="password2"
+                    placeholder="确认密码（注册时填写）"
+                />
+                <p>↓ 请等待 hCaptcha 加载 ↓</p>
+                <div
+                    class="h-captcha"
+                    data-sitekey="ecc49911-56f9-456e-afc9-b342e65bdc01"
+                    data-callback="cb_login_hcaptcha"
+                ></div>
+                <div id="login_controls" style="display: none">
+                    <button id="login_btn">登录</button>
+                    <button id="register_btn">注册</button>
+                </div>
+                <button id="readonly_btn">不登录直接使用（不能发消息）</button>
+            </div>
+        </div>
+    </body>
+</html>
