@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>橘子树 Chat</title>
         <script src="index.js"></script>
-        <script src="../index.js" type="module"></script>
         <link rel="stylesheet" href="index.css" />
     </head>
     <body>
@@ -21,17 +20,24 @@
         </div>
         <div id="login">
             <div class="inner">
-                <h3>登录</h3>
-                <input type="text" id="username" placeholder="用户名" />
-                <input type="password" id="password" placeholder="密码" />
-                <input
-                    type="password"
-                    id="password2"
-                    placeholder="确认密码（注册时填写）"
-                />
-                <div>
-                    <button id="login_btn">登录</button>
-                    <button id="register_btn">注册</button>
+                <div class="login">
+                    <h3>登录</h3>
+                    <input type="text" id="username" placeholder="用户名" />
+                    <input type="password" id="password" placeholder="密码" />
+                    <input
+                        type="password"
+                        id="password2"
+                        placeholder="确认密码（注册时填写）"
+                    />
+                    <p>保存密码自动登录：请在选项页面中设置</p>
+                    <div>
+                        <button id="login_btn">登录</button>
+                        <button id="register_btn">注册</button>
+                    </div>
+                </div>
+                <div class="autologin" style="display: none;">
+                    <h3>自动登录</h3>
+                    <p>正在使用保存的信息登录到 橘子树 Chat</p>
                 </div>
                 <button id="readonly_btn">不登录直接使用（不能发消息）</button>
             </div>

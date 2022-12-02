@@ -3,20 +3,28 @@
   "version": "1.0.0",
   "description": "橘子树 Chat",
   "main": "src/main.js",
+  "bin": {
+    "main": "src/main.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "\"node_modules\\electron\\dist\\electron\" .",
+    "package": "electron-packager . \"橘子树Chat\" --platform=win32 --arch=x64 --icon=src/resources/logo.ico --out=./out --asar --overwrite"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shikukuya/chat.git"
   },
-  "author": "shikukuya",
+  "author": "shikukuya <shikukuya@qq.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/shikukuya/chat/issues"
   },
   "homepage": "https://github.com/shikukuya/chat#readme",
   "dependencies": {
+    "electron": "^22.0.0"
+  },
+  "devDependencies": {
     "electron": "^22.0.0"
   }
 }

@@ -5,8 +5,6 @@ var METADATA = {
     account_server: "ws://111.67.198.246:1145",
     heartbeat: "HeartBeat",
     file_regxp: /^我发了一个文件，下载(链接|连接)是（.+）$/,
-    login_error:
-        '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="https://music.163.com/outchain/player?type=2&id=333750&auto=1&height=66"></iframe>',
     websocket_error: "无法连接至服务器，请联系站长",
     loading_button: "正在进行操作，需要3-5秒时间，请不要多点",
 };
@@ -17,9 +15,7 @@ var fs = require("fs");
 var appdata = process.env.APPDATA;
 var root_folder = appdata + "\\橘子树工作室\\chat";
 var options_file = root_folder + "\\options.json";
-var options = {
-    theme: "orange",
-};
+var options = {};
 
 document.addEventListener("DOMContentLoaded", (e) => {
     //#region 处理fs相关信息
@@ -28,13 +24,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         fs.mkdirSync(appdata + "\\橘子树工作室\\chat");
     } catch {}
     try {
-        JSON.parse(
-            fs.readFileSync(options_file).toString("utf-8"),
-            (key, value) => {
-                console.log("读取配置文件", key, value);
-                options[key] = value;
-            }
-        );
+        options = JSON.parse(fs.readFileSync(options_file).toString("utf-8"));
     } catch {
         fs.writeFileSync(
             options_file,
@@ -138,6 +128,21 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
     //#region 应用配置
     document.querySelector("html").className = options.theme;
+    if (
+        !(
+            options.autologin.password === "" ||
+            typeof options.autologin.password === "undefined"
+        )
+    ) {
+        // 自动登录
+        document.querySelector("#login > .inner > .login").style.display =
+            "none";
+        document.querySelector("#login > .inner > .autologin").style.display =
+            "block";
+        setTimeout(() => {
+            login(options.autologin.username, options.autologin.password);
+        }, 700);
+    }
     //#endregion
 });
 
@@ -204,9 +209,7 @@ function login(user, password) {
         console.log(e.data);
         if (e.data === "<*假*>") {
             document.querySelector("#login_btn").innerText = "登录 - 登录失败";
-            var el = document.createElement("div");
-            el.innerHTML = METADATA.login_error;
-            document.querySelector("#login > .inner").append(el);
+            document.querySelector("#login > .inner > .autologin p").innerText = "登录失败"
         } else {
             username = user;
             readonly = false;
