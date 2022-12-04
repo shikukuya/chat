@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="orange">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>橘子树 Chat</title>
+        <script src="index.js"></script>
+        <script src="options.js"></script>
+        <link rel="stylesheet" href="options.css" />
+    </head>
+    <body>
+        <nav>
+            <h3>橘子树 Chat - 选项</h3>
+            <a href="index.html">返回</a>
+        </nav>
+        <table>
+            <tbody>
+                <tr>
+                    <td>主题</td>
+                    <td>
+                        <select id="theme">
+                            <option value="light">浅色</option>
+                            <option value="dark">深色</option>
+                            <option value="orange">橙色</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>自动登录</td>
+                    <td>
+                        <details>
+                            <summary></summary>
+                            <span>如果不想自动登录把密码框留空即可</span>
+                            <br>
+                            <input
+                                type="text"
+                                id="autologin_username"
+                                placeholder="用户名"
+                            />
+                            <br />
+                            <input
+                                type="password"
+                                id="autologin_password"
+                                placeholder="密码"
+                            />
+                        </details>
+                    </td>
+                </tr>
+                <tr>
+                    <td>关于</td>
+                    <td>
+                        <details>
+                            <summary></summary>
+                            <span>1.1-node 交流群:938770865</span>
+                        </details>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="save">保存修改</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
