@@ -7,10 +7,17 @@ var METADATA = {
     file_regxp: /^我发了一个文件，下载(链接|连接)是（.+）$/,
     websocket_error: "无法连接至服务器，请联系站长",
     loading_button: "正在进行操作，需要3-5秒时间，请不要多点",
+    ftp_config: {
+        host: "111.67.198.246",
+        port: 21,
+        user: "0",
+        password: "0",
+    },
 };
 var last_time = "00:00";
 var username = "Unknown";
 var readonly = true;
+var ftp = require("ftp");
 var fs = require("fs");
 var appdata = process.env.APPDATA;
 var root_folder = appdata + "\\橘子树工作室\\chat";
@@ -57,20 +64,64 @@ document.addEventListener("DOMContentLoaded", (e) => {
                 heartbeat(ws);
             }
         });
-        function _() {
-            // 临时函数：发送输入框中的消息
-            if (readonly) {
-                alert("当前为未登录模式，请登录后发送消息");
-            } else {
-                send(
-                    ws,
-                    username,
-                    document.querySelector("#input > input").value
-                );
-                document.querySelector("#input > input").value = "";
-            }
+        function _(e) {
+            // 临时函数：发送输入框中的消息=
+            send(
+                ws,
+                username,
+                document.querySelector("#input > input").value
+            );
+            document.querySelector("#input > input").value = "";
         }
         document.querySelector("#input > button").addEventListener("click", _);
+        document.querySelector("#send_file").addEventListener("click", (e) => {
+            // 临时文件夹
+            fs.mkdirSync(
+                "C:" + process.env.HOMEPATH + "\\Desktop\\橘子树Chat-文件上传"
+            );
+            alert(
+                "请把要发送的文件复制到 桌面/橘子树Chat-文件上传 文件夹中，然后点击确定"
+            );
+            if (
+                fs.readdirSync(
+                    "C:" +
+                        process.env.HOMEPATH +
+                        "\\Desktop\\橘子树Chat-文件上传"
+                ).length !== 1
+            ) {
+                alert("只能同时上传一个文件");
+            } else {
+                send_file(
+                    ws,
+                    "C:" +
+                        process.env.HOMEPATH +
+                        "\\Desktop\\橘子树Chat-文件上传\\" +
+                        fs.readdirSync(
+                            "C:" +
+                                process.env.HOMEPATH +
+                                "\\Desktop\\橘子树Chat-文件上传"
+                        )[0]
+                );
+            }
+            setTimeout(() => {
+                // 删除临时文件夹
+                try {
+                    fs.rmSync(
+                        "C:" +
+                            process.env.HOMEPATH +
+                            "\\Desktop\\橘子树Chat-文件上传\\" +
+                            fs.readdirSync(
+                                "C:" +
+                                    process.env.HOMEPATH +
+                                    "\\Desktop\\橘子树Chat-文件上传"
+                            )[0]
+                    );
+                } catch {}
+                fs.rmdirSync(
+                    "C:" + process.env.HOMEPATH + "\\Desktop\\橘子树Chat-文件上传"
+                );
+            }, 1000);
+        });
         document
             .querySelector("#input > input")
             .addEventListener("keydown", (e) => {
@@ -119,6 +170,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
             .querySelector("#readonly_btn")
             .addEventListener("click", (e) => {
                 // 不登录按钮
+                document.querySelector("#actions").style.display = "none";
+                document.querySelector("#input").style.display = "none";
                 document.querySelector("#login").style.display = "none";
             });
         //#endregion
@@ -135,10 +188,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
         )
     ) {
         // 自动登录
-        document.querySelector("#login > .inner > .login").style.display =
-            "none";
-        document.querySelector("#login > .inner > .autologin").style.display =
-            "block";
+        document.querySelector(
+            "#login > .inner > .login .login"
+        ).style.display = "none";
+        document.querySelector(
+            "#login > .inner > .login .autologin"
+        ).style.display = "block";
         setTimeout(() => {
             login(options.autologin.username, options.autologin.password);
         }, 700);
@@ -158,10 +213,12 @@ function add(user, content, me) {
     var el = document.createElement("div");
     el.classList.add(type);
     if (content.match(METADATA.file_regxp)) {
-        var file = content.substring(14, content.length - 1);
-        file = file.startsWith("http") ? file : `http://${file}`;
-        file = file.replace(":8080", ":86");
-        el.innerHTML = `<a href="${file}" target="_blank">查看文件</a><details><summary>预览</summary><iframe src="${file}" frameborder="0">无法预览文件</iframe></details>`;
+        setTimeout(() => {
+            var file = content.substring(14, content.length - 1);
+            file = file.startsWith("http") ? file : `http://${file}`;
+            file = file.replace(":8080", ":86");
+            el.innerHTML = `<a href="${file}" target="_blank">[查看文件]</a><details><summary>预览</summary><iframe src="${file}" frameborder="0">无法预览文件</iframe></details>`;
+        }, 1000);
     } else {
         el.innerText = content;
     }
@@ -209,7 +266,9 @@ function login(user, password) {
         console.log(e.data);
         if (e.data === "<*假*>") {
             document.querySelector("#login_btn").innerText = "登录 - 登录失败";
-            document.querySelector("#login > .inner > .autologin p").innerText = "登录失败"
+            document.querySelector(
+                "#login > .inner > .login .autologin p"
+            ).innerText = "登录失败";
         } else {
             username = user;
             readonly = false;
@@ -227,4 +286,22 @@ function register(username, password) {
     wsa.addEventListener("error", (e) => {
         alert(METADATA.websocket_error);
     });
+}
+function send_file(ws, path) {
+    var c = new ftp();
+    var spath =
+        "uploads/" +
+        Math.random().toString().substring(3, 13) +
+        "." +
+        path.split(".")[path.split(".").length - 1];
+    c.on("ready", () => {
+        c.put(fs.readFileSync(path).toString(), spath);
+        c.end();
+    });
+    c.connect(METADATA.ftp_config);
+    send(
+        ws,
+        username,
+        `我发了一个文件，下载连接是（http://111.67.198.246:84/${spath}）`
+    );
 }
