@@ -34,7 +34,7 @@ body {
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-rows: 4em calc(100vh - 7em) 3em;
+    grid-template-rows: 4em calc(100vh - 8.8em) 1.8em 3em;
 }
 nav {
     display: flex;
@@ -87,6 +87,7 @@ nav > * {
 }
 #messages > div.msg > details > iframe,
 #messages > div.me > details > iframe {
+    width: 50vw;
     height: 40vh;
 }
 #messages > div.msg::before {
@@ -110,6 +111,15 @@ nav > * {
 #input {
     display: grid;
     grid-template-columns: auto 20%;
+}
+#actions {
+    background-color: var(--message-background);
+    padding: 0.1em;
+}
+#actions > span {
+    margin-right: 0.1em;
+    border: var(--info-background) solid 2px;
+    border-radius: 3px;
 }
 #input > * {
     height: 100%;

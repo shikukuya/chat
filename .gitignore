@@ -1,4 +1,6 @@
 node_modules/
 out/
 *.exe
+/index.html
+.vscode/
 查看下载地址和源代码.txt
