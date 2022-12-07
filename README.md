@@ -12,7 +12,7 @@ $ git clone https://github.com/shikukuya/chat
 $ git checkout origin/python
 $ git fetch
 $ git pull
-$ alias chat="python3 ~/chat/chat.py"
+$ '\nalias chat="python3 ~/chat/chat.py"\n' >> ~/.bashrc
 ```
 
 ## 使用
