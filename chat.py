@@ -38,10 +38,12 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.formatted_text import StyleAndTextTuples
 from websockets.client import connect as wsconnect
 from websockets.client import WebSocketClientProtocol
-from asyncio import sleep
+from asyncio import sleep, coroutine
 from re import match
 
 
+# There is a bug in this lexer. Don't use it.
+r"""
 class MessageLexer(Lexer):
     def __init__(self) -> None:
         super().__init__()
@@ -53,9 +55,10 @@ class MessageLexer(Lexer):
             "Return the tokens for the given line."
             try:
                 t = document.lines[lineno - 1]
-                if match(r"^.+……$", t):
+                if match(r"^\[!\] .+$", t):
                     r = [
-                        ("#ffff00", t)
+                        ("#ffff00", "[!] "),
+                        ("#bbbbbb", t[4:])
                     ]
                 elif match(r"^.+：.+$", t):
                     a = t.split("：")[0]
@@ -74,6 +77,7 @@ class MessageLexer(Lexer):
                 return []
 
         return get_line
+"""
 
 
 user = TextArea(
@@ -83,14 +87,13 @@ user = TextArea(
     width=Dimension(14, 14),
     height=Dimension(1, 1),
     wrap_lines=False,
-    multiline=False
+    multiline=False,
 )
 recv = TextArea(
     read_only=True,
     focus_on_click=True,
     focusable=True,
     multiline=True,
-    lexer=MessageLexer(),
     scrollbar=True
 )
 send = TextArea(
@@ -169,6 +172,9 @@ async def task_heartbeat():
 
 async def add(msg: str):
     recv.text = recv.text + "\n" + msg
+    send.text = ""
+    for _ in range(200):
+        recv.control.move_cursor_down()
 
 
 async def sendmsg(username: str | None = None, msg: str | None = None):
@@ -186,7 +192,7 @@ async def connect():
 
 
 async def task_background():
-    recv.text = "连接成功，ESC退出，F1-F3移动焦点……"
+    recv.text = "[!] 连接成功，ESC退出，F1-F3移动焦点，PgUp/PgDn翻页"
     await connect()
 
 
