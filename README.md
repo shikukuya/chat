@@ -8,7 +8,7 @@
 
 ```bash
 $ cd
-$ git clone https://github.com/shikukuya/chat
+$ git clone https://github.com/shikukuya/chat.git
 $ git checkout origin/python
 $ git fetch
 $ git pull
