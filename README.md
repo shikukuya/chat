@@ -1,4 +1,4 @@
-# 橘子树 Chat For Linux
+# 橘子树 Chat - PY
 
 ## 介绍
 
@@ -6,17 +6,28 @@
 
 ## 安装
 
+### *nux
+
 ```bash
 $ cd
 $ git clone https://github.com/shikukuya/chat.git
 $ git checkout origin/python
 $ git fetch
 $ git pull
-$ '\nalias chat="python3 ~/chat/chat.py"\n' >> ~/.bashrc
 ```
+
+### Windows
+
+下载 [chat.exe](https://github.com/shikukuya/chat/blob/python/dist/chat.exe)
 
 ## 使用
 
+### *nux
+
 ```bash
-$ chat
+$ python3 ~/chat/chat.py
 ```
+
+### Windows
+
+双击即可使用
