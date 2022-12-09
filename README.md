@@ -18,7 +18,7 @@ $ git pull
 
 ### Windows
 
-下载 [chat.exe](https://github.com/shikukuya/chat/blob/python/dist/chat.exe)
+下载 [chat.exe](https://github.com/shikukuya/chat/raw/python/dist/chat.exe)
 
 ## 使用
 
